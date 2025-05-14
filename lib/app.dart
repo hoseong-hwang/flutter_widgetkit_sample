@@ -32,8 +32,8 @@ class Shell extends StatelessWidget {
               ),
               children: [
                 TextSpan(
-                    text: Enviroment.enviroment.tag.isNotEmpty
-                        ? "${Enviroment.enviroment.tag} "
+                    text: Environment.enviroment.tag.isNotEmpty
+                        ? "${Environment.enviroment.tag} "
                         : ""),
                 const TextSpan(text: "WIDGETKIT"),
               ]),

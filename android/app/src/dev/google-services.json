@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "868280180529",
+    "project_id": "tyger-playground-firebase",
+    "storage_bucket": "tyger-playground-firebase.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:868280180529:android:2cc08a7a19ddaed5739a10",
+        "android_client_info": {
+          "package_name": "com.tyger.widgetkitsample"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCub8B9CpJCMhoXb-vd-no7yP9a9APioLo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:868280180529:android:4180fb2cb3dd270c739a10",
+        "android_client_info": {
+          "package_name": "com.tyger.widgetkitsample.dev"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCub8B9CpJCMhoXb-vd-no7yP9a9APioLo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

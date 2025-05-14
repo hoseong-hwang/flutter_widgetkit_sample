@@ -1,4 +1,4 @@
-enum EnviromentType {
+enum EnvironmentType {
   dev(type: "dev", tag: "[DEV]"),
   prod(type: "prod", tag: "");
 
@@ -6,7 +6,7 @@ enum EnviromentType {
 
   final String tag;
 
-  const EnviromentType({
+  const EnvironmentType({
     required this.type,
     required this.tag,
   });
