@@ -5,14 +5,14 @@ import ActivityKit
 
 @available(iOS 16.1, *)
 struct LiveActivityManager {
-    static var currentActivity: Activity<OrderStatusWidgetAttributes>?
+    static var currentActivity: Activity<SampleWidgetAttributes>?
 
     static func start(completion: @escaping (String?) -> Void) {
-        let attributes = OrderStatusWidgetAttributes()
-        let state = OrderStatusWidgetAttributes.ContentState(status: "order_received")
+        let attributes = SampleWidgetAttributes()
+        let state = SampleWidgetAttributes.ContentState(status: "order_received")
 
         do {
-            let activity = try Activity<OrderStatusWidgetAttributes>.request(
+            let activity = try Activity<SampleWidgetAttributes>.request(
                 attributes: attributes,
                 contentState: state,
                 pushType: .token
@@ -39,7 +39,7 @@ struct LiveActivityManager {
             return
         }
 
-        let newState = OrderStatusWidgetAttributes.ContentState(status: status)
+        let newState = SampleWidgetAttributes.ContentState(status: status)
         Task {
             await activity.update(using: newState)
             print("✅ Live Activity Updated: \(status)")
@@ -65,7 +65,7 @@ struct LiveActivityManager {
             return
         }
 
-        let finalState = OrderStatusWidgetAttributes.ContentState(status: status)
+        let finalState = SampleWidgetAttributes.ContentState(status: status)
         let oneHourLater = Date().addingTimeInterval(TimeInterval(seconds)) // seconds = 3600
 
         Task {

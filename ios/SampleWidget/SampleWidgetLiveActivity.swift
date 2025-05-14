@@ -1,25 +1,23 @@
 //
-//  OrderStatusWidgetLiveActivity.swift
-//  OrderStatusWidget
+//  SampleWidgetLiveActivity.swift
+//  SampleWidget
 //
-//  Created by ppbstudios on 5/14/25.
+//  Created by TYGER on 5/15/25.
 //
 
 import ActivityKit
 import WidgetKit
 import SwiftUI
 
-struct OrderStatusWidgetAttributes: ActivityAttributes {
+struct SampleWidgetAttributes: ActivityAttributes {
     public struct ContentState: Codable, Hashable {
         var status: String
     }
-
 }
 
-@available(iOS 16.1, *)
-struct OrderStatusWidgetLiveActivity: Widget {
+struct SampleWidgetLiveActivity: Widget {
     var body: some WidgetConfiguration {
-        ActivityConfiguration(for: OrderStatusWidgetAttributes.self) { context in
+        ActivityConfiguration(for: SampleWidgetAttributes.self) { context in
             // Lock screen/banner UI goes here
             VStack {
                 Text("Hello \(context.state.status)")
@@ -29,6 +27,8 @@ struct OrderStatusWidgetLiveActivity: Widget {
 
         } dynamicIsland: { context in
             DynamicIsland {
+                // Expanded UI goes here.  Compose the expanded UI through
+                // various regions, like leading/trailing/center/bottom
                 DynamicIslandExpandedRegion(.leading) {
                     Text("Leading")
                 }
@@ -52,19 +52,10 @@ struct OrderStatusWidgetLiveActivity: Widget {
     }
 }
 
-extension OrderStatusWidgetAttributes {
-    fileprivate static var preview: OrderStatusWidgetAttributes {
-        OrderStatusWidgetAttributes()
+extension SampleWidgetAttributes {
+    fileprivate static var preview: SampleWidgetAttributes {
+        SampleWidgetAttributes()
     }
 }
 
-extension OrderStatusWidgetAttributes.ContentState {
-    fileprivate static var smiley: OrderStatusWidgetAttributes.ContentState {
-        OrderStatusWidgetAttributes.ContentState(status: "😀")
-     }
-     
-     fileprivate static var starEyes: OrderStatusWidgetAttributes.ContentState {
-         OrderStatusWidgetAttributes.ContentState(status: "🤩")
-     }
-}
 

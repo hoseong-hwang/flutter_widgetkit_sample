@@ -1,8 +1,8 @@
 ////
-////  OrderStatusWidget.swift
-////  OrderStatusWidget
+////  SampleWidget.swift
+////  SampleWidget
 ////
-////  Created by ppbstudios on 5/14/25.
+////  Created by TYGER on 5/15/25.
 ////
 //
 //import WidgetKit
@@ -43,7 +43,7 @@
 //    let emoji: String
 //}
 //
-//struct OrderStatusWidgetEntryView : View {
+//struct SampleWidgetEntryView : View {
 //    var entry: Provider.Entry
 //
 //    var body: some View {
@@ -57,16 +57,16 @@
 //    }
 //}
 //
-//struct OrderStatusWidget: Widget {
-//    let kind: String = "OrderStatusWidget"
+//struct SampleWidget: Widget {
+//    let kind: String = "SampleWidget"
 //
 //    var body: some WidgetConfiguration {
 //        StaticConfiguration(kind: kind, provider: Provider()) { entry in
 //            if #available(iOS 17.0, *) {
-//                OrderStatusWidgetEntryView(entry: entry)
+//                SampleWidgetEntryView(entry: entry)
 //                    .containerBackground(.fill.tertiary, for: .widget)
 //            } else {
-//                OrderStatusWidgetEntryView(entry: entry)
+//                SampleWidgetEntryView(entry: entry)
 //                    .padding()
 //                    .background()
 //            }
@@ -76,9 +76,8 @@
 //    }
 //}
 //
-//@available(iOS 17.0, *)
 //#Preview(as: .systemSmall) {
-//    OrderStatusWidget()
+//    SampleWidget()
 //} timeline: {
 //    SimpleEntry(date: .now, emoji: "😀")
 //    SimpleEntry(date: .now, emoji: "🤩")

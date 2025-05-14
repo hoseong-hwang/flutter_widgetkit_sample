@@ -14,7 +14,13 @@ class Enviroment {
 
   const Enviroment._internal();
 
-  void run() => runApp(const App());
+  Future<void> run() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    // await Firebase.initializeApp(
+    //   options: DefaultFirebaseOptions.currentPlatform,
+    // );
+    runApp(const App());
+  }
 
   static Enviroment get instance => _instance;
   static EnviromentType get enviroment => _type;
