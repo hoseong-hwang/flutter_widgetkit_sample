@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widgetkit_sample/_env/environment.dart';
 import 'package:flutter_widgetkit_sample/live_activity_helper.dart';
@@ -13,8 +14,34 @@ class App extends StatelessWidget {
   }
 }
 
-class Shell extends StatelessWidget {
+class Shell extends StatefulWidget {
   const Shell({super.key});
+
+  @override
+  State<Shell> createState() => _ShellState();
+}
+
+class _ShellState extends State<Shell> {
+  @override
+  void initState() {
+    super.initState();
+    permission();
+    getToken();
+    LiveActivityHelper.setTokenListener((_) {});
+  }
+
+  void permission() async {
+    FirebaseMessaging.instance.requestPermission(
+      badge: true,
+      alert: true,
+      sound: true,
+    );
+  }
+
+  void getToken() async {
+    String? token = await FirebaseMessaging.instance.getToken();
+    print("pushToken : $token");
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -30,8 +30,6 @@ import ActivityKit
                 }
                 
             case "updateLiveActivity":
-              print("🔥 updateLiveActivity called") // 여기 먼저 찍히는지 확인
-
               if #available(iOS 16.1, *),
                  let args = call.arguments as? [String: Any],
                  let status = args["status"] as? String {
@@ -62,6 +60,14 @@ import ActivityKit
                 
             default:
                 print("⚠️ Unknown method: \(call.method)")
+            }
+        }
+        
+        if #available(iOS 17.2, *) {
+          LiveActivityManager.observePushToStartToken { token in
+            DispatchQueue.main.async {
+              channel.invokeMethod("onPushToStartToken", arguments: token)
+              }
             }
         }
     }

@@ -23,4 +23,14 @@ class LiveActivityHelper {
       "status": "delivered",
     });
   }
+
+  static void setTokenListener(void Function(String token) onToken) {
+    channel.setMethodCallHandler((call) async {
+      if (call.method == "onPushToStartToken") {
+        final String token = call.arguments as String;
+        print("📡 Push-to-Start Token: $token");
+        onToken(call.arguments as String);
+      }
+    });
+  }
 }

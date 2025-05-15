@@ -6,6 +6,18 @@ import ActivityKit
 @available(iOS 16.1, *)
 struct LiveActivityManager {
     static var currentActivity: Activity<SampleWidgetAttributes>?
+    
+    static func observePushToStartToken(onReceived: @escaping (String) -> Void) {
+        if #available(iOS 17.2, *) {
+            Task {
+                for await tokenData in Activity<SampleWidgetAttributes>.pushToStartTokenUpdates {
+                    let token = tokenData.map { String(format: "%02x", $0) }.joined()
+                    print("📡 Push-to-Start Token: \(token)")
+                    onReceived(token)
+                }
+            }
+        }
+    }
 
     static func start(completion: @escaping (String?) -> Void) {
         let attributes = SampleWidgetAttributes()
@@ -23,8 +35,8 @@ struct LiveActivityManager {
                 for await data in activity.pushTokenUpdates {
                     let token = data.map { String(format: "%02x", $0) }.joined()
                     print("📦 Push token: \(token)")
-                    completion(token) // ✅ Flutter로 전달
-                    break // 첫 토큰만 전달하고 중단
+                    completion(token) 
+                    break 
                 }
             }
         } catch {
