@@ -72,11 +72,11 @@ class _ShellState extends State<Shell> {
               display: "Start LiveActivity",
               onTap: () => LiveActivityHelper.startLiveActivity()),
           _button(
-              display: "Update (preparing)",
-              onTap: () => LiveActivityHelper.updateLiveActivity("preparing")),
+              display: "Update (Preparing)",
+              onTap: () => LiveActivityHelper.updateLiveActivity("accepted")),
           _button(
-              display: "Update (in_transit)",
-              onTap: () => LiveActivityHelper.updateLiveActivity("in_transit")),
+              display: "Update (Picked Up)",
+              onTap: () => LiveActivityHelper.updateLiveActivity("sold")),
           _button(
               display: "End Now",
               onTap: () => LiveActivityHelper.endLiveActivity()),

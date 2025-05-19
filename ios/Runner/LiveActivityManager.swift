@@ -21,7 +21,7 @@ struct LiveActivityManager {
 
     static func start(completion: @escaping (String?) -> Void) {
         let attributes = SampleWidgetAttributes()
-        let state = SampleWidgetAttributes.ContentState(status: "order_received")
+        let state = SampleWidgetAttributes.ContentState(status: "pending")
 
         do {
             let activity = try Activity<SampleWidgetAttributes>.request(
