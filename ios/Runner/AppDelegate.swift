@@ -22,7 +22,13 @@ import ActivityKit
             switch call.method {
             case "startLiveActivity":
                 if #available(iOS 16.1, *) {
-                    LiveActivityManager.start { token in
+                    guard let args =  call.arguments as? [String:Any],
+                          let name = args["name"] as? String,
+                          let address = args["address"] as? String else {
+                        result(nil)
+                        return
+                    }
+                    LiveActivityManager.start(name:name, address:address) { token in
                         result(token)
                     }
                 } else {

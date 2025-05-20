@@ -4,7 +4,10 @@ class LiveActivityHelper {
   static const MethodChannel channel = MethodChannel("live_activity_channel");
 
   static Future<void> startLiveActivity() async {
-    final String? token = await channel.invokeMethod("startLiveActivity");
+    final String? token = await channel.invokeMethod("startLiveActivity", {
+      "name": "Wynwood",
+      "address": "194 NW 24th St",
+    });
     print(token);
   }
 

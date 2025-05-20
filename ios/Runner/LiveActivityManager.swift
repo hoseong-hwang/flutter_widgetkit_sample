@@ -19,8 +19,8 @@ struct LiveActivityManager {
         }
     }
 
-    static func start(completion: @escaping (String?) -> Void) {
-        let attributes = SampleWidgetAttributes()
+    static func start(name:String, address:String, completion: @escaping (String?) -> Void) {
+        let attributes = SampleWidgetAttributes(name: name, address: address)
         let state = SampleWidgetAttributes.ContentState(status: "pending")
 
         do {

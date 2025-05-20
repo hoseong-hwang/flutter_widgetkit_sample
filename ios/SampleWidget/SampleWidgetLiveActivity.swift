@@ -13,23 +13,26 @@ struct SampleWidgetAttributes: ActivityAttributes {
     public struct ContentState: Codable, Hashable {
         var status: String
     }
+    let name:String
+    let address:String
 }
 
 func statusMessage(for status: String) -> String {
     switch status {
     case "pending": return "Order Received"
-    case "accepted": return "Preparing"
+    case "accepted": return "Preparing Order"
     case "sold": return "Picked Up"
-//    case "denied": return "Cancelled"
+    case "denied": return "Cancelled"
     default: return "Order Received"
     }
 }
 
 func iconName(for status: String) -> String {
     switch status {
-    case "pending": return "clock"              // 주문 접수 (대기 중 느낌)
-    case "accepted": return "shippingbox.fill"   // 상품 준비됨
-    case "sold": return "checkmark.circle.fill" // 픽업 완료
+    case "pending": return "paperplane.circle.fill"          // 주문 접수 (대기 중 느낌)
+    case "accepted": return "shippingbox.fill"               // 상품 준비됨
+    case "sold": return "checkmark.circle.fill"              // 픽업 완료
+    case "denied": return "exclamationmark.circle.fill"
     default: return "questionmark.circle"
     }
 }
@@ -41,28 +44,36 @@ struct SampleWidgetLiveActivity: Widget {
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: SampleWidgetAttributes.self) { context in
             ZStack{
-//                Color(red: 1.0, green: 0.357, blue: 0.596)
                 VStack{
-                    HStack(alignment:.top,
-                           spacing: 0){
-                        Image(systemName: "cart.fill")
-                            .foregroundColor(.white)
-                            .frame(width: 40, height: 40)
-                            .background(Color(red: 1.0, green: 0.357, blue: 0.596))
-                            .clipShape(Circle())
-                        VStack(alignment:.leading){
-                            Text("Wynwood Pickup").foregroundColor(Color.white.opacity(0.8)).fontWeight(.semibold).font(.system(size: 16))
-                            Text("adress dsfkdl 123").foregroundColor(Color.white.opacity(0.7)).font(.system(size: 12)).italic()
-                        }.padding(.leading, 12)
-                        Spacer()
-                    }.padding(.bottom, 12)
-                    HStack {
-                            VStack(alignment: .center) {
+                    HStack(alignment:.center, spacing: 0){
+                        HStack {
+                            Image("LogoIcon")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 40, height: 40)
+                                .background(Color(red: 1.0, green: 0.357, blue: 0.596))
+                                .clipShape(RoundedRectangle(cornerRadius: 12))
+                            VStack(alignment:.leading){
+                                Text(context.attributes.name).foregroundColor(Color.white.opacity(0.9)).fontWeight(.semibold).font(.system(size: 16))
+                                Text(context.attributes.address).foregroundColor(Color.white.opacity(0.7)).font(.system(size: 12)).italic().lineLimit(2)
+                                    .truncationMode(.tail)
+                            }.padding(.leading, 4)
+                            Spacer()
+                        }
+                        if context.state.status == "denied" {
+                            Text(statusMessage(for: context.state.status))
+                                .foregroundColor(Color(red: 1.0, green: 0.357, blue: 0.596))
+                                .font(.system(size: 18, weight: .bold))
+                        }
+                    }
+                
+                    if context.state.status != "denied" {
+                    HStack(alignment:.center) {
+                            VStack() {
                                 Text(statusMessage(for: context.state.status))
                                     .foregroundColor(.white)
                                     .font(.system(size: 18, weight: .bold))
                             }
-                            .padding(.leading, 8)
                             Spacer()
                             HStack(spacing: 0) {
                                 ForEach(stepStatuses, id: \.self) { step in
@@ -70,64 +81,132 @@ struct SampleWidgetLiveActivity: Widget {
                                         ZStack {
                                             Circle()
                                                 .fill(stepStatuses.firstIndex(of: context.state.status)! >= stepStatuses.firstIndex(of: step)! ?
-                                                      Color(red: 1.0, green: 0.357, blue: 0.596) : Color.white.opacity(0.3))
-                                                .frame(width: 35, height: 35)
-
+                                                       Color(red: 1.0, green: 0.357, blue: 0.596) : Color.white.opacity(0.3))
+                                                .frame(width: 40, height: 40)
                                             Image(systemName: iconName(for: step))
                                                 .foregroundColor(stepStatuses.firstIndex(of: context.state.status)! >= stepStatuses.firstIndex(of: step)! ?
                                                                  .white : .white.opacity(0.6))
-                                                .font(.system(size: 16, weight: .bold))
+                                                .font(.system(size: 20, weight: .bold))
                                         }
-
                                         if step != stepStatuses.last {
-                                            Rectangle()
-                                                .fill(Color.white.opacity(0.6))
-                                                .frame(width: 16, height: 3)
-                                                .padding(.horizontal, 4)
-                                                .offset(y: -1)
+                                            if let currentIndex = stepStatuses.firstIndex(of: context.state.status),
+                                               let stepIndex = stepStatuses.firstIndex(of: step),
+                                               stepIndex < stepStatuses.count - 1 {
+
+                                                let nextStep = stepStatuses[stepIndex + 1]
+                                                let isLineActive = currentIndex >= stepStatuses.firstIndex(of: nextStep)!
+
+                                                Rectangle()
+                                                    .fill(isLineActive
+                                                         ? Color(red: 1.0, green: 0.357, blue: 0.596)
+                                                          : Color.white.opacity(0.3))
+                                                    .frame(width: 20, height: 6)
+                                                    .padding(.horizontal, 0)
+                                                    .offset(y: -1)
+                                            }
                                         }
                                     }
                                 }
                             }
-                        }
-
-                }.padding(.vertical, 16)
-                    .padding(.horizontal, 12)
+                        }.padding(.top,12)
+                    }
+                }.padding(.vertical, 20)
+                    .padding(.horizontal, 20)
             }.edgesIgnoringSafeArea(.all)
-                .activityBackgroundTint(Color(red: 1.0, green: 0.5647, blue: 0.6706))
-                .activitySystemActionForegroundColor(.white)
+                .activityBackgroundTint(.black.opacity(0.7))
+                .activitySystemActionForegroundColor(.gray)
                 
 
         } dynamicIsland: { context in
             DynamicIsland {
-                // Expanded UI goes here.  Compose the expanded UI through
-                // various regions, like leading/trailing/center/bottom
                 DynamicIslandExpandedRegion(.leading) {
-                    Text("Leading")
+                    Image("LogoIcon")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 40, height: 40)
+                                            .background(Color(red: 1.0, green: 0.357, blue: 0.596))
+                                            .clipShape(RoundedRectangle(cornerRadius: 8)).padding(.top, 4).padding(.leading, 4)
                 }
                 DynamicIslandExpandedRegion(.trailing) {
-                    Text("Trailing")
+                    VStack (alignment:.center){
+                        if(context.state.status == "denied") {
+                            Text(statusMessage(for: context.state.status))
+                                .foregroundColor(Color(red: 1.0, green: 0.357, blue: 0.596))
+                                .font(.system(size: 18, weight: .bold))
+                        } else {
+                            Text("Store").font(.system(size: 12)).foregroundColor(.white.opacity(0.7))
+                            Text(context.attributes.name).font(.system(size: 16,weight: .bold)).foregroundColor(.white.opacity(0.9))
+                        }
+                    }.frame(height: 40).padding(.top, 4).padding(.trailing, 4)
                 }
                 DynamicIslandExpandedRegion(.bottom) {
-                    Text("Bottom \(context.state.status)")
-                    // more content
+                    if context.state.status != "denied" {
+                    HStack(alignment:.center) {
+                            VStack() {
+                                Text(statusMessage(for: context.state.status))
+                                    .foregroundColor(.white)
+                                    .font(.system(size: 18, weight: .bold))
+                            }
+                            Spacer()
+                            HStack(spacing: 0) {
+                                ForEach(stepStatuses, id: \.self) { step in
+                                    HStack(spacing: 0) {
+                                        ZStack {
+                                            Circle()
+                                                .fill(stepStatuses.firstIndex(of: context.state.status)! >= stepStatuses.firstIndex(of: step)! ?
+                                                       Color(red: 1.0, green: 0.357, blue: 0.596) : Color.white.opacity(0.3))
+                                                .frame(width: 40, height: 40)
+                                            Image(systemName: iconName(for: step))
+                                                .foregroundColor(stepStatuses.firstIndex(of: context.state.status)! >= stepStatuses.firstIndex(of: step)! ?
+                                                                 .white : .white.opacity(0.6))
+                                                .font(.system(size: 20, weight: .bold))
+                                        }
+                                        if step != stepStatuses.last {
+                                            if let currentIndex = stepStatuses.firstIndex(of: context.state.status),
+                                               let stepIndex = stepStatuses.firstIndex(of: step),
+                                               stepIndex < stepStatuses.count - 1 {
+
+                                                let nextStep = stepStatuses[stepIndex + 1]
+                                                let isLineActive = currentIndex >= stepStatuses.firstIndex(of: nextStep)!
+
+                                                Rectangle()
+                                                    .fill(isLineActive
+                                                         ? Color(red: 1.0, green: 0.357, blue: 0.596)
+                                                          : Color.white.opacity(0.3))
+                                                    .frame(width: 20, height: 6)
+                                                    .padding(.horizontal, 0)
+                                                    .offset(y: -1)
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }.padding(.top,12)
+                    }
+                    
                 }
             } compactLeading: {
-                Text("L")
+                Image("LogoIcon")
+                    .resizable()
+                    .scaledToFit()
+                    .background(Color(red: 1.0, green: 0.357, blue: 0.596))
+                    .clipShape(RoundedRectangle(cornerRadius: 4)).padding(.leading, 4)
             } compactTrailing: {
-                Text("T \(context.state.status)")
+                Image(systemName: iconName(for: context.state.status))
+                    .resizable()
+                    .scaledToFit()
+                    .foregroundColor(context.state.status=="sold" ? .green :.white)
+                    .clipShape(RoundedRectangle(cornerRadius: 4)).padding(.trailing, 4)
             } minimal: {
-                Text(context.state.status)
+                Image(systemName: iconName(for: context.state.status))
+                    .resizable()
+                    .scaledToFit()
+                    .foregroundColor(context.state.status=="sold" ? .green :.white)
+                    .clipShape(RoundedRectangle(cornerRadius: 4))
             }
             .widgetURL(URL(string: "http://www.apple.com"))
             .keylineTint(Color.red)
         }
-    }
-}
-
-extension SampleWidgetAttributes {
-    fileprivate static var preview: SampleWidgetAttributes {
-        SampleWidgetAttributes()
     }
 }
 
