@@ -135,6 +135,13 @@
 			);
 			target = 360A01AB2DDABF0E0063F285 /* ScoreWidgetExtension */;
 		};
+		363EBDB82DDC6E010092A09C /* Exceptions for "ScoreWidget" folder in "Runner" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				ScoreWidgetLiveActivity.swift,
+			);
+			target = 97C146ED1CF9000F007C117D /* Runner */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -150,6 +157,7 @@
 		360A01AF2DDABF0E0063F285 /* ScoreWidget */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
+				363EBDB82DDC6E010092A09C /* Exceptions for "ScoreWidget" folder in "Runner" target */,
 				360A01C32DDABF100063F285 /* Exceptions for "ScoreWidget" folder in "ScoreWidgetExtension" target */,
 			);
 			path = ScoreWidget;
