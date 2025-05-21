@@ -1,7 +1,10 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_widgetkit_sample/_env/environment.dart';
 import 'package:flutter_widgetkit_sample/d_live_activity_helper.dart';
+import 'package:flutter_widgetkit_sample/live_activity_helper.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -39,8 +42,12 @@ class _ShellState extends State<Shell> {
   }
 
   void getToken() async {
-    String? token = await FirebaseMessaging.instance.getToken();
-    print("pushToken : $token");
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      String? token = await FirebaseMessaging.instance.getToken();
+      if (kDebugMode) {
+        print("Push Token : $token");
+      }
+    });
   }
 
   @override
@@ -66,26 +73,21 @@ class _ShellState extends State<Shell> {
               ]),
         ),
       ),
-      body: Column(
+      body: ListView(
         children: [
+          _section("Order Activity"),
           _button(
               display: "Start LiveActivity",
-              onTap: () => DLiveActivityHelper.startLiveActivity()),
+              onTap: () => LiveActivityHelper.start(LiveActivityType.order)),
           _button(
               display: "Update (Preparing)",
-              onTap: () => DLiveActivityHelper.updateLiveActivity("accepted")),
-          _button(
-              display: "Update (Picked Up)",
-              onTap: () => DLiveActivityHelper.updateLiveActivity("sold")),
-          _button(
-              display: "Update (Cancelled)",
-              onTap: () => DLiveActivityHelper.updateLiveActivity("denied")),
+              onTap: () => LiveActivityHelper.orderUpdate("preparing")),
           _button(
               display: "End Now",
-              onTap: () => DLiveActivityHelper.endLiveActivity()),
+              onTap: () => LiveActivityHelper.orderEndNow()),
           _button(
               display: "End in 1 Hour",
-              onTap: () => DLiveActivityHelper.endLiveActivityWithDelay()),
+              onTap: () => LiveActivityHelper.orderEndLater()),
         ],
       ),
     );
@@ -96,12 +98,15 @@ class _ShellState extends State<Shell> {
     required Function() onTap,
   }) =>
       GestureDetector(
-        onTap: onTap,
+        onTap: () {
+          HapticFeedback.mediumImpact();
+          onTap();
+        },
         child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-          height: 50,
+          margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+          height: 40,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(4),
             color: const Color.fromRGBO(96, 96, 96, 1),
           ),
           alignment: Alignment.center,
@@ -109,9 +114,23 @@ class _ShellState extends State<Shell> {
             display,
             style: const TextStyle(
               fontWeight: FontWeight.w600,
-              fontSize: 14,
+              fontSize: 12,
               color: Colors.white,
             ),
+          ),
+        ),
+      );
+
+  Container _section(String name) => Container(
+        height: 40,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        alignment: Alignment.centerLeft,
+        child: Text(
+          name,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
           ),
         ),
       );

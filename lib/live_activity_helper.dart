@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 enum LiveActivityType { order }
@@ -5,18 +6,32 @@ enum LiveActivityType { order }
 class LiveActivityHelper {
   static const MethodChannel order = MethodChannel("live_activity_order");
 
-  Future<void> start(LiveActivityType type) async {
+  static Future<void> start(LiveActivityType type) async {
     switch (type) {
       case LiveActivityType.order:
         final String? token = await order.invokeMethod("start", {
-          "name": "Wynwood",
-          "address": "194 NW 24th St",
-          "count": 1,
+          "name": "The Original Starbucks",
+          "address": "1912 Pike Place, Seattle",
+          "count": 3,
         });
-        print(token);
+        if (kDebugMode) {
+          print("LiveActivity Token : $token");
+        }
         return;
       default:
         return;
     }
+  }
+
+  static Future<void> orderUpdate(String status) async {
+    await order.invokeMethod("update", {"status": status});
+  }
+
+  static Future<void> orderEndNow() async {
+    await order.invokeMethod("end_now");
+  }
+
+  static Future<void> orderEndLater() async {
+    await order.invokeMethod("end_later");
   }
 }

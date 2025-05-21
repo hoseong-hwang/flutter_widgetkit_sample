@@ -17,7 +17,7 @@ struct SampleWidgetAttributes: ActivityAttributes {
     let address:String
 }
 
-func statusMessage(for status: String) -> String {
+private func statusMessage(for status: String) -> String {
     switch status {
     case "pending": return "Order Received"
     case "accepted": return "Preparing Order"
@@ -27,7 +27,7 @@ func statusMessage(for status: String) -> String {
     }
 }
 
-func iconName(for status: String) -> String {
+private func iconName(for status: String) -> String {
     switch status {
     case "pending": return "paperplane.circle.fill"          // 주문 접수 (대기 중 느낌)
     case "accepted": return "shippingbox.fill"               // 상품 준비됨
@@ -37,7 +37,7 @@ func iconName(for status: String) -> String {
     }
 }
 
-let stepStatuses = ["pending", "accepted", "sold"]
+private let stepStatuses = ["pending", "accepted", "sold"]
 
 
 struct SampleWidgetLiveActivity: Widget {

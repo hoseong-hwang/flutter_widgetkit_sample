@@ -33,6 +33,20 @@ import ActivityKit
                 OrderActivityManager.start(name: name, address: address, count: count) { token in
                     result(token)
                 }
+            case "update":
+                guard let args = call.arguments as? [String:Any],
+                      let status = args["status"] as?  String else {
+                    result(nil)
+                    return
+                }
+                OrderActivityManager.update(status:status)
+                result(nil)
+            case "end_now":
+                OrderActivityManager.endImmediately()
+                result(nil)
+            case "end_later":
+                OrderActivityManager.endAfterDelay()
+                result(nil)
             default:
                 result(nil)
             }
