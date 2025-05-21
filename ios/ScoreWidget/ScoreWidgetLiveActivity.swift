@@ -1,9 +1,4 @@
-//
-//  ScoreWidgetLiveActivity.swift
-//  ScoreWidget
-//
-//  Created by ppbstudios on 5/19/25.
-//
+
 
 import ActivityKit
 import WidgetKit

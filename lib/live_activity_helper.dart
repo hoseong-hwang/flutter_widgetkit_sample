@@ -1,39 +1,22 @@
 import 'package:flutter/services.dart';
 
+enum LiveActivityType { order }
+
 class LiveActivityHelper {
-  static const MethodChannel channel = MethodChannel("live_activity_channel");
+  static const MethodChannel order = MethodChannel("live_activity_order");
 
-  static Future<void> startLiveActivity() async {
-    final String? token = await channel.invokeMethod("startLiveActivity", {
-      "name": "Wynwood",
-      "address": "194 NW 24th St",
-    });
-    print(token);
-  }
-
-  static Future<void> updateLiveActivity(String status) async {
-    await channel.invokeMethod("updateLiveActivity", {
-      "status": status,
-    });
-  }
-
-  static Future<void> endLiveActivity() async {
-    await channel.invokeMethod("endLiveActivity");
-  }
-
-  static Future<void> endLiveActivityWithDelay() async {
-    await channel.invokeMethod("endLiveActivityWithDelay", {
-      "status": "delivered",
-    });
-  }
-
-  static void setTokenListener(void Function(String token) onToken) {
-    channel.setMethodCallHandler((call) async {
-      if (call.method == "onPushToStartToken") {
-        final String token = call.arguments as String;
-        print("📡 Push-to-Start Token: $token");
-        onToken(call.arguments as String);
-      }
-    });
+  Future<void> start(LiveActivityType type) async {
+    switch (type) {
+      case LiveActivityType.order:
+        final String? token = await order.invokeMethod("start", {
+          "name": "Wynwood",
+          "address": "194 NW 24th St",
+          "count": 1,
+        });
+        print(token);
+        return;
+      default:
+        return;
+    }
   }
 }

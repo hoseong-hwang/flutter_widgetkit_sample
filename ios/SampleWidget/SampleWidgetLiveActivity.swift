@@ -139,6 +139,7 @@ struct SampleWidgetLiveActivity: Widget {
                         }
                     }.frame(height: 40).padding(.top, 4).padding(.trailing, 4)
                 }
+                
                 DynamicIslandExpandedRegion(.bottom) {
                     if context.state.status != "denied" {
                     HStack(alignment:.center) {
