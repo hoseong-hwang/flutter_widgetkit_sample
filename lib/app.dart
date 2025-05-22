@@ -88,6 +88,12 @@ class _ShellState extends State<Shell> {
           _button(
               display: "End in 1 Hour",
               onTap: () => LiveActivityHelper.orderEndLater()),
+          _section("Score Activity"),
+          _button(
+              display: "Start LiveActivity",
+              onTap: () => LiveActivityHelper.start(LiveActivityType.score)),
+          _button(
+              display: "Update", onTap: () => LiveActivityHelper.scoreUpdate()),
         ],
       ),
     );
@@ -123,6 +129,7 @@ class _ShellState extends State<Shell> {
 
   Container _section(String name) => Container(
         height: 40,
+        margin: const EdgeInsets.only(top: 12),
         padding: const EdgeInsets.symmetric(horizontal: 16),
         alignment: Alignment.centerLeft,
         child: Text(

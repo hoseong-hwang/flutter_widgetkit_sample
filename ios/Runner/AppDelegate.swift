@@ -19,6 +19,53 @@ import ActivityKit
     
     private func configureLiveActivityChannel(controller: FlutterViewController) {
         let order = FlutterMethodChannel(name: "live_activity_order", binaryMessenger: controller.binaryMessenger)
+        let score = FlutterMethodChannel(name:"live_activity_score", binaryMessenger: controller.binaryMessenger)
+        
+        score.setMethodCallHandler { call, result in
+            switch call.method {
+            case "start":
+                guard let args = call.arguments as? [String: Any],
+                      let homeDict = args["home"] as? [String: Any],
+                      let awayDict = args["away"] as? [String: Any],
+                      let statusDict = args["status"] as? [String: Any] else {
+                    result(nil)
+                    return
+                }
+                
+                do {
+                    let homeData = try JSONSerialization.data(withJSONObject: homeDict)
+                    let awayData = try JSONSerialization.data(withJSONObject: awayDict)
+                    let statusData = try JSONSerialization.data(withJSONObject: statusDict)
+                    
+                    let home = try JSONDecoder().decode(ScoreTeamModel.self, from: homeData)
+                    let away = try JSONDecoder().decode(ScoreTeamModel.self, from: awayData)
+                    let status = try JSONDecoder().decode(ScoreStateModel.self, from: statusData)
+                    
+                    ScoreActivityManager.start(home: home, away: away, status: status) { token in
+                        result(token)
+                    }
+                } catch {
+                    result(nil)
+                }
+            case "update":
+                guard let args = call.arguments as? [String: Any],
+                      let statusDict = args["status"] as? [String: Any] else {
+                    result(nil)
+                    return
+                }
+                do {
+                    
+                    let statusData = try JSONSerialization.data(withJSONObject: statusDict)
+                    let status = try JSONDecoder().decode(ScoreStateModel.self, from: statusData)
+                    ScoreActivityManager.update(status: status)
+                    result(nil)
+                } catch {
+                    result(nil)
+                }
+            default:
+                result(nil)
+            }
+        }
         
         order.setMethodCallHandler { call, result in
             switch call.method {
