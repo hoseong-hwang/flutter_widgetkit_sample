@@ -1,14 +1,18 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
-enum LiveActivityType { order, score }
+enum LiveActivityType { order, score, step }
 
 class LiveActivityHelper {
   static const MethodChannel order = MethodChannel("live_activity_order");
   static const MethodChannel score = MethodChannel("live_activity_score");
+  static const MethodChannel step = MethodChannel("live_activity_step");
 
   static Future<void> start(LiveActivityType type) async {
     switch (type) {
+      case LiveActivityType.step:
+        await step.invokeMethod("start");
+        return;
       case LiveActivityType.order:
         final String? token = await order.invokeMethod("start", {
           "name": "The Original Starbucks",

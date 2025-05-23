@@ -17,9 +17,26 @@ import ActivityKit
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
     
+    
+    override func applicationWillTerminate(_ application: UIApplication) {
+        StepActivityManager.end()
+    }
+    
     private func configureLiveActivityChannel(controller: FlutterViewController) {
         let order = FlutterMethodChannel(name: "live_activity_order", binaryMessenger: controller.binaryMessenger)
         let score = FlutterMethodChannel(name:"live_activity_score", binaryMessenger: controller.binaryMessenger)
+        let step = FlutterMethodChannel(name:"live_activity_step", binaryMessenger: controller.binaryMessenger)
+        
+        step.setMethodCallHandler { call, result in
+            switch call.method {
+            case "start":
+                StepActivityManager.start()
+                result(nil)
+            default:
+                result(nil)
+            }
+            
+        }
         
         score.setMethodCallHandler { call, result in
             switch call.method {

@@ -94,6 +94,10 @@ class _ShellState extends State<Shell> {
               onTap: () => LiveActivityHelper.start(LiveActivityType.score)),
           _button(
               display: "Update", onTap: () => LiveActivityHelper.scoreUpdate()),
+          _section("Step Activity"),
+          _button(
+              display: "Start LiveActivity",
+              onTap: () => LiveActivityHelper.start(LiveActivityType.step)),
         ],
       ),
     );
