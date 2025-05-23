@@ -29,6 +29,13 @@ private func statusBoxColor(status:String)->Color {
     default: return .black
     }
 }
+private func currentStatusWidget(status:String) -> some View {
+    HStack {
+        Text(statusMessage(status: status)).font(.system(size: 8,weight: .semibold)).foregroundColor(.white)
+            .padding(.vertical,2).padding(.horizontal,8)
+    }.background(statusBoxColor(status: status)).cornerRadius(8)
+    
+}
 
 private struct TeamWidget: View{
     let team:ScoreTeamModel
@@ -55,10 +62,11 @@ struct ScoreWidgetLiveActivity: Widget {
                         Text(String(context.state.status.awayScore)).font(.system(size: 34,weight: .bold)).foregroundColor(.white)
                     }.frame(alignment: .center).padding(.bottom,2)
                     Text(context.state.status.inning).font(.system(size: 12,weight: .bold)).foregroundColor(.white.opacity(0.7)).italic()
-                    HStack {
-                        Text(statusMessage(status: context.state.status.status)).font(.system(size: 8,weight: .semibold)).foregroundColor(.white)
-                            .padding(.vertical,2).padding(.horizontal,8)
-                    }.background(statusBoxColor(status: context.state.status.status)).cornerRadius(8)
+                    currentStatusWidget(status: context.state.status.status)
+                    //                    HStack {
+                    //                        Text(statusMessage(status: context.state.status.status)).font(.system(size: 8,weight: .semibold)).foregroundColor(.white)
+                    //                            .padding(.vertical,2).padding(.horizontal,8)
+                    //                    }.background(statusBoxColor(status: context.state.status.status)).cornerRadius(8)
                     
                 }
                 Spacer()
@@ -71,10 +79,34 @@ struct ScoreWidgetLiveActivity: Widget {
             .padding(.vertical, 20)
         } dynamicIsland: { context in
             DynamicIsland {
-                DynamicIslandExpandedRegion(.bottom, content: {
-                    Text(
-                        "adsfdsafsdafas"
-                    )
+                DynamicIslandExpandedRegion(.leading, content: {
+                    Text(context.state.status.inning).font(.system(size: 10,weight: .semibold)).foregroundColor(.white).padding(.leading, 8)
+                })
+                DynamicIslandExpandedRegion(.trailing, content: {
+                    currentStatusWidget(status: context.state.status.status).padding(.trailing, 8)
+                })
+                DynamicIslandExpandedRegion(.bottom,content: {
+                    HStack {
+                        HStack{
+                            VStack {
+                                Text("HOME").font(.system(size: 10, weight: .bold)).foregroundColor(.white.opacity(0.5))
+                                Text(context.attributes.home.code).font(.system(size: 14, weight: .bold)).foregroundColor(.white.opacity(0.7))
+                            }.padding(.trailing,8)
+                            Image(context.attributes.home.logo).resizable().scaledToFit().frame(width: 35, height: 35).cornerRadius(8).padding(.trailing, 16)
+                            Text(String(context.state.status.homeScore)).font(.system(size: 34,weight: .bold)).foregroundColor(.white)
+                        }.padding(.leading,8)
+                        Spacer()
+                        Text("vs").font(.system(size: 20,weight: .bold)).foregroundColor(.white.opacity(0.3)).padding(.horizontal, 12).padding(.bottom,4)
+                        Spacer()
+                        HStack{
+                            Text(String(context.state.status.awayScore)).font(.system(size: 34,weight: .bold)).foregroundColor(.white)
+                            Image(context.attributes.away.logo).resizable().scaledToFit().frame(width: 35, height: 35).cornerRadius(8).padding(.leading, 16)
+                            VStack {
+                                Text("AWAY").font(.system(size: 10, weight: .bold)).foregroundColor(.white.opacity(0.5))
+                                Text(context.attributes.away.code).font(.system(size: 14, weight: .bold)).foregroundColor(.white.opacity(0.7))
+                            }.padding(.leading, 8)
+                        }.padding(.trailing,8)
+                    }.frame(width:.infinity, height: 50)
                 })
             } compactLeading: {
                 HStack {
@@ -88,12 +120,12 @@ struct ScoreWidgetLiveActivity: Widget {
                 }
             } minimal: {
                 if context.state.status.homeScore == context.state.status.awayScore {
-                    Circle().background(.red)
+                    Circle().foregroundColor(statusBoxColor(status: context.state.status.status))
                 } else {
                     let winningLogo = context.state.status.homeScore > context.state.status.awayScore
-                        ? context.attributes.home.logo
-                        : context.attributes.away.logo
-
+                    ? context.attributes.home.logo
+                    : context.attributes.away.logo
+                    
                     Image(winningLogo)
                         .resizable()
                         .scaledToFit()
