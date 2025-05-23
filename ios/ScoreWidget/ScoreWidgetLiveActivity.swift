@@ -63,11 +63,6 @@ struct ScoreWidgetLiveActivity: Widget {
                     }.frame(alignment: .center).padding(.bottom,2)
                     Text(context.state.status.inning).font(.system(size: 12,weight: .bold)).foregroundColor(.white.opacity(0.7)).italic()
                     currentStatusWidget(status: context.state.status.status)
-                    //                    HStack {
-                    //                        Text(statusMessage(status: context.state.status.status)).font(.system(size: 8,weight: .semibold)).foregroundColor(.white)
-                    //                            .padding(.vertical,2).padding(.horizontal,8)
-                    //                    }.background(statusBoxColor(status: context.state.status.status)).cornerRadius(8)
-                    
                 }
                 Spacer()
                 TeamWidget(team: context.attributes.away)
@@ -132,7 +127,7 @@ struct ScoreWidgetLiveActivity: Widget {
                         .clipShape(Circle())
                 }
             }
-            .widgetURL(URL(string: "http://www.apple.com"))
+            .widgetURL(URL(string: "tyger://"))
             .keylineTint(Color.red)
         }
     }
